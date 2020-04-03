@@ -89,6 +89,8 @@ It is recommended to setup a Prettier plugin for your IDE plugins/packages that 
  * [VS Code](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
  * [WebStorm](https://prettier.io/docs/en/webstorm.html)
  
+ *When installing the plugin for VS Code make sure you are on [v3.7.0 or lower](https://github.com/prettier/prettier-vscode/issues/1085#issuecomment-557027886)*
+ 
 ### Unit Tests
 Testing is done via [Jest](https://facebook.github.io/jest/) and [Enzyme](http://airbnb.io/enzyme/).
 
@@ -143,9 +145,6 @@ TypeScript is supported and should be used when adding new code. It's also recom
 We are using [Codechecks](https://www.codechecks.io/) and [Typecov](https://github.com/codechecks/typecov) for coverage reporting. Coverage is automatically analyzed for PRs and the following command is available.
 * `yarn codechecks`
 
-### Typecov
-It is recommended that you install the VSCode plugin for Typecov reporting so you can see any (no pun intended) errors inline. You can find that [here](https://marketplace.visualstudio.com/items?itemName=york-yao.vscode-type-coverage)
-
 ## Code Bundle Analysis/Reports
 To visualize and interact with the tree of the production code bundles files:
  * `yarn analyze`
@@ -161,7 +160,7 @@ The following commands are available:
 If the deploy begins to fail, deleting the static build file before redeploy will likely help.
 
 ## Contribute
-Bug fixes and feedback on our code is always appreciated.
+Please review to the [Wiki](https://github.com/blockchain/blockchain-wallet-v4-frontend/wiki) 
 
 ## Security
 Security issues can be reported to us in the following venues:

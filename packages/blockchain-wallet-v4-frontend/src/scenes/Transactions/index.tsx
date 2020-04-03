@@ -1,7 +1,9 @@
 import { actions, model } from 'data'
+import { CoinType, FiatType, SupportedCoinType } from 'core/types'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { getData } from './selectors'
+import { getHeaderExplainer } from './template.headerexplainer'
 import { Icon, Text } from 'blockchain-info-components'
 import { path, toLower } from 'ramda'
 import { reduxForm } from 'redux-form'
@@ -28,6 +30,9 @@ const PageTitle = styled.div`
   }
 `
 const Header = styled.div`
+  width: 100%;
+`
+const ExplainerWrapper = styled.div`
   width: 100%;
 `
 const StatsContainer = styled.div`
@@ -65,13 +70,11 @@ const StatsContainer = styled.div`
 
 type OwnProps = {
   buySellPartner: 'coinify' | 'sfox'
-  // FIXME: TypeScript use CoinType
-  coin: 'BTC' | 'BCH' | 'ETH' | 'PAX' | 'XLM'
-  // FIXME: TypeScript use SupportedCoinType
-  coinModel: any
-  // FIXME: TypeScript use CurrencyType
-  currency: any
+  coin: CoinType
+  coinModel: SupportedCoinType
+  currency: FiatType
   hasTxResults: boolean
+  isCoinErc20: boolean
   isSearchEntered: boolean
   pages: Array<any>
 }
@@ -103,10 +106,6 @@ class TransactionsContainer extends React.PureComponent<Props> {
     }
   }
 
-  handleLoadMore = () => {
-    this.props.loadMoreTxs()
-  }
-
   handleRefresh = () => {
     this.props.fetchData()
     this.props.initTxs()
@@ -121,14 +120,16 @@ class TransactionsContainer extends React.PureComponent<Props> {
       coinModel,
       currency,
       hasTxResults,
+      isCoinErc20,
       isSearchEntered,
+      loadMoreTxs,
       pages
     } = this.props
     const { colorCode, coinTicker, displayName, icons } = coinModel
 
     return (
       <SceneWrapper>
-        <LazyLoadContainer onLazyLoad={this.handleLoadMore}>
+        <LazyLoadContainer onLazyLoad={loadMoreTxs}>
           <Header>
             <PageTitle>
               <Icon size='36px' color={colorCode} name={icons.circleFilled} />
@@ -136,9 +137,19 @@ class TransactionsContainer extends React.PureComponent<Props> {
                 {displayName}
               </Text>
             </PageTitle>
+            {!hasTxResults && (
+              <ExplainerWrapper>
+                {getHeaderExplainer(coinModel)}
+              </ExplainerWrapper>
+            )}
+
             <StatsContainer>
-              <WalletBalanceDropdown coin={coin} coinModel={coinModel} />
-              <CoinPerformance coin={coin} />
+              <WalletBalanceDropdown
+                coin={coin}
+                coinModel={coinModel}
+                isCoinErc20={isCoinErc20}
+              />
+              <CoinPerformance coin={coin} coinModel={coinModel} />
             </StatsContainer>
           </Header>
           {(hasTxResults || isSearchEntered) && (
@@ -164,7 +175,7 @@ class TransactionsContainer extends React.PureComponent<Props> {
                 data={value}
                 key={index}
                 onArchive={this.handleArchive}
-                onLoadMore={this.handleLoadMore}
+                onLoadMore={loadMoreTxs}
                 onRefresh={this.handleRefresh}
               />
             ))

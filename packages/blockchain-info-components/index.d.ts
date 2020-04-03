@@ -1,10 +1,6 @@
-import {
-  StatelessComponent,
-  PureComponent,
-  CSSProperties,
-  ComponentElement
-} from 'react'
+import { StatelessComponent, CSSProperties } from 'react'
 import { DefaultTheme } from 'styled-components'
+
 import { IcoMoonType } from './src/Icons/Icomoon'
 import { ImageType } from './src/Images/Images'
 
@@ -21,9 +17,12 @@ export const Button: StatelessComponent<
       | 'dark-grey'
       | 'empty-secondary'
       | 'empty'
+      | 'empty-blue'
       | 'gray-3'
       | 'green'
+      | 'grey800'
       | 'light'
+      | 'light-red'
       | 'primary'
       | 'purple'
       | 'received'
@@ -32,6 +31,7 @@ export const Button: StatelessComponent<
       | 'success'
       | 'transferred'
       | 'warning'
+      | 'white-blue'
       | 'white-transparent'
     bold?: boolean
     capitalize?: boolean
@@ -44,6 +44,7 @@ export const Button: StatelessComponent<
     onClick?: () => void
     padding?: string
     rounded?: boolean
+    size?: string
     small?: boolean
     style?: CSSProperties
     uppercase?: boolean
@@ -75,13 +76,56 @@ export const Icon: StatelessComponent<{
   weight?: number
   size?: string
   cursor?: boolean
-  color?: string
+  color?: keyof DefaultTheme
   style?: CSSProperties
   onClick?: () => void
+  role?: 'button'
 }>
+export const IconButton: StatelessComponent<
+  {
+    'data-e2e': string
+    nature?:
+      | 'copy'
+      | 'dark'
+      | 'dark-grey'
+      | 'empty-secondary'
+      | 'empty'
+      | 'gray-3'
+      | 'green'
+      | 'light'
+      | 'primary'
+      | 'purple'
+      | 'received'
+      | 'secondary'
+      | 'sent'
+      | 'success'
+      | 'transferred'
+      | 'warning'
+      | 'white-blue'
+      | 'white-transparent'
+    bold?: boolean
+    capitalize?: boolean
+    className?: string
+    disabled?: boolean
+    fullwidth?: boolean
+    height?: string
+    jumbo?: boolean
+    margin?: string
+    onClick?: () => void
+    padding?: string
+    rounded?: boolean
+    small?: boolean
+    style?: CSSProperties
+    uppercase?: boolean
+    width?: string
+  } & React.ButtonHTMLAttributes<{}>
+>
 export const IconGlobalStyles: StatelessComponent<{}>
 export const Image: StatelessComponent<{
   name: keyof ImageType
+  srcset?: {
+    [key in keyof ImageType]?: '1x' | '2x' | '3x'
+  }
   width?: string
   height?: string
   color?: string
@@ -98,7 +142,7 @@ export const Link: StatelessComponent<{
   target?: string
   rel?: string
   style?: CSSProperties
-  onClick?: () => void
+  onClick?: (e?: KeyboardEvent) => void
 }>
 export const Modal: StatelessComponent<{
   size?: '' | 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge'
@@ -166,6 +210,7 @@ export const TextGroup: StatelessComponent<{
 }>
 export const TooltipHost: StatelessComponent<{ id: string }>
 export const TooltipIcon: StatelessComponent<{
+  color?: keyof DefaultTheme
   name: keyof IcoMoonType
   size?: string
 }>

@@ -26,13 +26,12 @@ const BuyTradeButton = styled(Button)`
   }
 `
 
-const { PRICE_CHART_EVENTS } = model.analytics
-
 const Footer = ({
-  analyticsActions,
   coinTicker,
   coinName,
-  isCoinifySupported,
+  invitations,
+  handleBuy,
+  isCoinifyUser,
   isSilverOrAbove
 }) => {
   const [swapTo, setSwapTo] = useState('BTC')
@@ -40,25 +39,16 @@ const Footer = ({
   useEffect(() => {
     coinTicker === 'BTC' ? setSwapTo('ETH') : setSwapTo('BTC')
   }, [coinTicker])
-
   return (
     <Wrapper>
-      {isCoinifySupported && isSilverOrAbove && coinName === 'Bitcoin' && (
-        <LinkContainer to='/buy-sell' data-e2e='buyAndSellLink'>
-          <BuyTradeButton
-            height='48px'
-            nature='primary'
-            onClick={() =>
-              analyticsActions.logEvent(PRICE_CHART_EVENTS.CLICK_BUY_BITCOIN)
-            }
-          >
-            <FormattedMessage
-              id='price.chart.buy.coin'
-              defaultMessage='Buy {coinName}'
-              values={{ coinName }}
-            />
-          </BuyTradeButton>
-        </LinkContainer>
+      {(!isCoinifyUser || (invitations && invitations.simpleBuy)) && (
+        <BuyTradeButton height='48px' nature='primary' onClick={handleBuy}>
+          <FormattedMessage
+            id='price.chart.buy.coin'
+            defaultMessage='Buy {coinName}'
+            values={{ coinName }}
+          />
+        </BuyTradeButton>
       )}
       {isSilverOrAbove && (
         <LinkContainer
@@ -73,13 +63,7 @@ const Footer = ({
           }}
           data-e2e='exchangeLink'
         >
-          <BuyTradeButton
-            height='48px'
-            nature='primary'
-            onClick={() =>
-              analyticsActions.logEvent(PRICE_CHART_EVENTS.CLICK_SWAP_COIN)
-            }
-          >
+          <BuyTradeButton height='48px' nature='primary'>
             <FormattedMessage
               id='price.chart.swap.coin'
               defaultMessage='Swap {coinName}'

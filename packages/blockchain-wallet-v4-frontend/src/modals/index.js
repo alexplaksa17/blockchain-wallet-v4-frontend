@@ -16,7 +16,7 @@ import {
   LinkToExchangeAccount,
   SwapGetStarted,
   UpgradeForAirdrop,
-  WalletTour
+  Welcome
 } from './Onboarding'
 import {
   AirdropError,
@@ -49,7 +49,7 @@ import {
   ShowUsedAddresses,
   UpgradeAddressLabels
 } from './Addresses'
-import { EditTxDescription, TransactionReport } from './Transactions'
+import { DownloadTransactions, EditTxDescription } from './Transactions'
 import {
   LockboxAppManager,
   LockboxConnectionPrompt,
@@ -81,6 +81,7 @@ import Faq from './Faq'
 import Onfido from './Onfido'
 import QRCode from './QRCode'
 import SignMessage from './SignMessage'
+import SimpleBuy from './SimpleBuy'
 import WhatsNew from './WhatsNew'
 
 const Modals = () => (
@@ -99,6 +100,7 @@ const Modals = () => (
     <Confirm />
     <ConfirmDisable2FA />
     <DeleteAddressLabel />
+    <DownloadTransactions />
     <EditTxDescription />
     <EthAirdrop />
     <ExchangeConfirm />
@@ -142,7 +144,6 @@ const Modals = () => (
     <Support />
     <SwapGetStarted />
     <SwapUpgrade />
-    <TransactionReport />
     <TransferEth />
     <TwoStepGoogleAuthenticator />
     <TwoStepSetup />
@@ -151,11 +152,12 @@ const Modals = () => (
     <UpgradeForAirdrop />
     <UpgradeWallet />
     <UserExists />
-    <WalletTour />
     <XlmCreateAccountLearn />
     <XlmReserveLearn />
+    <SimpleBuy />
     <SunRiverWelcome disableOutsideClose />
     <VerifyMessage />
+    <Welcome />
     <WhatsNew />
   </div>
 )

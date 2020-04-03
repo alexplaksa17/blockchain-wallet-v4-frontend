@@ -1,10 +1,3 @@
-import { Field, reduxForm } from 'redux-form'
-import { FormattedMessage } from 'react-intl'
-import Bowser from 'bowser'
-import PropTypes from 'prop-types'
-import React from 'react'
-import styled from 'styled-components'
-
 import {
   Banner,
   Button,
@@ -24,6 +17,7 @@ import {
   FeePerByteContainer,
   Row
 } from 'components/Send'
+import { ErrorCartridge } from 'components/Cartridge'
 import {
   FiatConverter,
   Form,
@@ -36,6 +30,8 @@ import {
   SelectBoxEthAddresses,
   TextAreaDebounced
 } from 'components/Form'
+import { Field, reduxForm } from 'redux-form'
+import { FormattedMessage } from 'react-intl'
 import {
   insufficientFunds,
   invalidAmount,
@@ -48,12 +44,16 @@ import {
 import { model } from 'data'
 import { Remote } from 'blockchain-wallet-v4/src'
 import { required, validEthAddress } from 'services/FormHelper'
+import Bowser from 'bowser'
 import ComboDisplay from 'components/Display/ComboDisplay'
 import LowBalanceWarning from './LowBalanceWarning'
 import LowEthWarningForErc20 from './LowEthWarningForErc20'
 import PriorityFeeLink from './PriorityFeeLink'
+import PropTypes from 'prop-types'
 import QRCodeCapture from 'components/QRCodeCapture'
+import React from 'react'
 import RegularFeeLink from './RegularFeeLink'
+import styled from 'styled-components'
 
 const WarningBanners = styled(Banner)`
   margin: -6px 0 12px;
@@ -61,6 +61,11 @@ const WarningBanners = styled(Banner)`
 `
 const SubmitFormGroup = styled(FormGroup)`
   margin-top: 16px;
+`
+const StyledRow = styled(Row)`
+  .bc__control input {
+    max-width: 350px;
+  }
 `
 
 const FirstStep = props => {
@@ -85,6 +90,7 @@ const FirstStep = props => {
     isSufficientEthForErc20
   } = props
   const isFromLockbox = from && from.type === 'LOCKBOX'
+  const isFromCustody = from && from.type === 'CUSTODIAL'
   const browser = Bowser.getParser(window.navigator.userAgent)
   const isBrowserSupported = browser.satisfies(
     model.components.lockbox.supportedBrowsers
@@ -94,7 +100,7 @@ const FirstStep = props => {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <FormGroup inline margin={'15px'}>
+      <FormGroup inline margin={'15px'} style={{ zIndex: 3 }}>
         <FormItem width={'40%'}>
           <FormLabel HtmlFor='coin'>
             <FormattedMessage
@@ -122,6 +128,7 @@ const FirstStep = props => {
             includeAll={false}
             validate={[required]}
             excludeLockbox={excludeLockbox}
+            includeCustodial
             coin={coin}
           />
         </FormItem>
@@ -154,7 +161,7 @@ const FirstStep = props => {
               defaultMessage='To'
             />
           </FormLabel>
-          <Row>
+          <StyledRow>
             <Field
               name='to'
               coin={coin}
@@ -174,7 +181,7 @@ const FirstStep = props => {
               scanType='ethAddress'
               border={['top', 'bottom', 'right', 'left']}
             />
-          </Row>
+          </StyledRow>
           {unconfirmedTx && (
             <Text color='error' size='12px' weight={400}>
               <FormattedMessage
@@ -260,7 +267,7 @@ const FirstStep = props => {
               )}
             </FeeFormLabel>
             {feeToggled && (
-              <FeePerByteContainer>
+              <FeePerByteContainer style={{ marginTop: '10px' }}>
                 <Field
                   data-e2e={`${coin}CustomFeeInput`}
                   coin={coin}
@@ -277,7 +284,7 @@ const FirstStep = props => {
           </FeeFormContainer>
         </ColLeft>
         <ColRight>
-          <ComboDisplay size='13px' coin='ETH'>
+          <ComboDisplay size='13px' weight={500} coin='ETH'>
             {fee}
           </ComboDisplay>
           <Link
@@ -312,6 +319,14 @@ const FirstStep = props => {
         </CustomFeeAlertBanner>
       ) : null}
       {disableDueToLowEth && <LowEthWarningForErc20 />}
+      {isFromCustody && (
+        <ErrorCartridge>
+          <FormattedMessage
+            id='modals.sendeth.firststep.fromcustoday.withdrawal'
+            defaultMessage='Withdrawals from your Trading Wallet will be enabled soon.'
+          />
+        </ErrorCartridge>
+      )}
       <SubmitFormGroup>
         <Button
           type='submit'

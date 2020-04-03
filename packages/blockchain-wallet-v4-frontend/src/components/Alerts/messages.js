@@ -249,6 +249,27 @@ export const getAlertContent = (message, data = undefined, handleClose, id) => {
           defaultMessage='Email address has been successfully verified'
         />
       )
+    case C.EXCHANGE_HISTORY_DOWNLOAD_BLOCKED:
+      return buildMessageTemplate(
+        <FormattedMessage
+          id='components.alerts.exchange_history_download_blocked'
+          defaultMessage='Your Swap transaction report is currently being processed. You will receive an email with your report shortly.'
+        />
+      )
+    case C.EXCHANGE_HISTORY_DOWNLOAD_ERROR:
+      return buildMessageTemplate(
+        <FormattedMessage
+          id='components.alerts.exchange_history_download_error'
+          defaultMessage='Failed to generate your Swap transaction report. Please try again later or contact support.'
+        />
+      )
+    case C.EXCHANGE_HISTORY_DOWNLOAD_SUCCESS:
+      return buildMessageTemplate(
+        <FormattedMessage
+          id='components.alerts.exchange_history_download_success'
+          defaultMessage='You will soon receive an email that contains a report of all of your Swap transactions from the past year.'
+        />
+      )
     case C.EXCHANGE_REFRESH_TRADES_ERROR:
       return buildMessageTemplate(
         <FormattedMessage
@@ -762,54 +783,6 @@ export const getAlertContent = (message, data = undefined, handleClose, id) => {
           defaultMessage='Your {coinName} transaction failed to send. Please try again.'
           values={data}
         />
-      )
-    case C.SKIP_WALLET_TOUR_SUCCESS:
-      const SkipWalletTourIcon = styled(Icon)`
-        background-color: ${({ theme }) => theme.orange000};
-        border-radius: 50%;
-        align-items: center;
-        justify-content: center;
-        height: 40px;
-        width: 40px;
-      `
-      return (
-        <Content>
-          <IconColumn>
-            <SkipWalletTourIcon size='24px' name='bell' color='orange600' />
-          </IconColumn>
-          <ContentColumn>
-            <Text size='14px' weight='600' data-e2e='skipWalletTourAlert'>
-              <FormattedMessage
-                id='components.alerts.wallet_tour_header'
-                defaultMessage='Wallet Intro Tour'
-              />
-            </Text>
-            <TextGroup inline>
-              <Text size='12px' weight='500'>
-                <FormattedMessage
-                  id='components.alerts.wallet_tour_info'
-                  defaultMessage="We've saved your Intro Tour under the What's New tab in case you ever want to revisit."
-                />
-              </Text>
-              <Text>
-                <Link
-                  data-e2e='startTourFromAlert'
-                  weight={500}
-                  size='12px'
-                  onClick={() => {
-                    data.startTour(true)
-                    handleClose(id)
-                  }}
-                >
-                  <FormattedMessage
-                    id='components.alerts.wallet_tour_start'
-                    defaultMessage='Start Tour'
-                  />
-                </Link>
-              </Text>
-            </TextGroup>
-          </ContentColumn>
-        </Content>
       )
     case C.SMS_RESEND_ERROR:
       return buildMessageTemplate(
